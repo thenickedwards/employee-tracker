@@ -28,9 +28,26 @@ const mainMenu = [
 async function startMainMenu() {
     const response = await inquirer
     .prompt(mainMenu)
-    if (response.continue == 'VIEW_EMPLOYEES') {
+    // console.log(response);
+
+    // IF VIEW ALL EMPS
+    if (response.mainMenuSelection == 'VIEW_EMPLOYEES') {
         viewAllEmployees();
     }
+    // IF ADD EMP
+    // IF UPDATE EMP
+    
+    // IF VIEW ALL ROLES
+    if (response.mainMenuSelection == 'VIEW_ROLES') {
+        viewAllRoles();
+    }
+    // IF ADD ROLE
+
+    // IF VIEW ALL DEPTS
+    if (response.mainMenuSelection == 'VIEW_DEPARTMENTS') {
+        viewAllDepartments();
+    }
+    // IF ADD DEPTS
 }
 
 // View all emps READ - `SELECT * FROM tablename`
@@ -39,21 +56,29 @@ async function viewAllEmployees() {
     console.table(allEmployees);
 }
 
+// ALT?
 // db.query('SELECT * FROM employees')
 //     .then((results) => {
 //         console.table(results);
 //     });
 
-// Add emp CREATE - `INSERT INTO tablename (col1, col2) VALUES (val1, val2)` + more info in hwdemo1
-// Update emp
+// ADD emp CREATE - `INSERT INTO tablename (col1, col2) VALUES (val1, val2)` + more info in hwdemo1
+// UPDATE emp
 
-// View all roles READ - `SELECT * FROM tablename`
-// Add role CREATE - `INSERT INTO tablename (col1, col2) VALUES (val1, val2)` + more info in hwdemo1 @ 35'
-async function createRole() {
-
+// ROLES ROLES ROLES
+// VIEW all roles READ - `SELECT * FROM tablename`
+async function viewAllRoles() {
+    const allRoles = await db.query('SELECT * FROM roles');
+    console.table(allRoles);
 }
+// ADD role CREATE - `INSERT INTO tablename (col1, col2) VALUES (val1, val2)` + more info in hwdemo1 @ 35'
 
-// View all depts READ - `SELECT * FROM tablename`
-// Add dept CREATE - `INSERT INTO tablename (col1, col2) VALUES (val1, val2)`
+// DEPTS DEPTS DEPTS
+// VIEW all depts READ - `SELECT * FROM tablename`
+async function viewAllDepartments() {
+    const allDepartments = await db.query('SELECT * FROM departments');
+    console.table(allDepartments);
+}
+// ADD dept CREATE - `INSERT INTO tablename (col1, col2) VALUES (val1, val2)`
 
 startMainMenu();
