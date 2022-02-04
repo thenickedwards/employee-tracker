@@ -13,13 +13,13 @@ const mainMenu = [
         type: "list",
         message: "What would you like to do?",
         choices: [
-            "View All Employees", 
-            "Add Employee", 
-            "Update Employee Role",
-            "View All Roles",
-            "Add Role",
-            "View All Departments",
-            "Add Department"
+            {name: "View All Employees", value: "VIEW_EMPLOYEES"},
+            {name: "Add Employee", value: "ADD_EMPLOYEE"},
+            {name: "Update Employee Role", value: "UPDATE_EMPLOYEE_ROLE"},
+            {name: "View All Roles", value: "VIEW_ROLES"},
+            {name: "Add Role", value: "ADD_ROLE"},
+            {name: "View All Departments", value: "VIEW_DEPARTMENTS"},
+            {name: "Add Department", value: "ADD_DEPARTMENT"}
         ]
     }
 ];
@@ -28,7 +28,7 @@ const mainMenu = [
 async function startMainMenu() {
     const response = await inquirer
     .prompt(mainMenu)
-    if (response.continue == 'View All Employees') {
+    if (response.continue == 'VIEW_EMPLOYEES') {
         viewAllEmployees();
     }
 }
