@@ -1,18 +1,9 @@
 // Requires
 const mysql = require('mysql2');
+const db = require('./db/connection');
 
-// Connection to database
-const db = mysql.createConnection(
-    {
-      host: '127.0.0.1',
-      // Your MySQL username below
-      user: 'root',
-      // Your MySQL password if used, if not leave as is
-      password: '',
-      database: 'employees_db'
-    },
-    // console.log(`Connected to the classlist_db database.`)
-  );
+
+
 
 //   Pseudocode
 // Present main menu
