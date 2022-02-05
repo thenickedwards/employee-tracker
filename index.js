@@ -6,7 +6,37 @@ const util = require('util');
 
 db.query = util.promisify(db.query);
 
-// Question/Main Menu Arrays for Inquirer
+// Arrays to display existing data
+var departmentsArray = [
+    {name: "Engineering", value: 1},
+    {name: "Legal", value: 2},
+    {name: "Finance", value: 3},
+    {name: "Sales", value: 4}
+]
+
+var rolesArray = [
+    {name: "Lead Engineer", value: 1},
+    {name: "Software Engineer", value: 2},
+    {name: "Lawyer", value: 3},
+    {name: "Legal Team Lead", value: 4},
+    {name: "Account Manager", value: 5},
+    {name: "Salesperson", value: 6},
+    {name: "Accountant", value: 7},
+]
+
+var newRoleID = rolesArray.length+1;
+
+// var managersArray = [
+//     {name: "Lead Engineer", value: 1},
+//     {name: "Software Engineer", value: 2},
+//     {name: "Lawyer", value: 3},
+//     {name: "Legal Team Lead", value: 4},
+//     {name: "Account Manager", value: 5},
+//     {name: "Salesperson", value: 6},
+//     {name: "Accountant", value: 7},
+// ]
+
+// Question Arrays for Inquirer
 const mainMenu = [
     {
         name: "mainMenuSelection",
@@ -38,8 +68,9 @@ const addEmployeeQuestions = [
     },
     {
         name: "employeeeRole",
-        type: "input",
-        message: "What is this employee's role?"
+        type: "list",
+        message: "What is this employee's role?",
+        choices: rolesArray
     },
     {
         name: "employeeeManager",
@@ -57,13 +88,13 @@ const addRoleQuestions = [
     {
         name: "roleSalary",
         type: "input",
-        message: "What is the salary of this role?"
+        message: "What is the salary of this role? (Enter as whole number with no special characters, e.g. $50,000 = 50000)"
     },
     {
         name: "roleDepartment",
-        type: "input",
+        type: "list",
         message: "Which department is appropriate this role?",
-        choices: departmentArray
+        choices: departmentsArray
     }
 ]
 
@@ -88,7 +119,7 @@ async function startMainMenu() {
     }
     // IF ADD EMP
     if (response.mainMenuSelection == 'ADD_EMPLOYEE') {
-        await addEmplolyee();
+        await addEmployee();
         startMainMenu();
     }
     // IF UPDATE EMP
@@ -99,6 +130,10 @@ async function startMainMenu() {
         startMainMenu();
     }
     // IF ADD ROLE
+    if (response.mainMenuSelection == 'ADD_ROLE') {
+        await addRole();
+        startMainMenu();
+    }
 
     // IF VIEW ALL DEPTS
     if (response.mainMenuSelection == 'VIEW_DEPARTMENTS') {
@@ -134,11 +169,12 @@ async function viewAllEmployees() {
 
 // ADD emp CREATE - `INSERT INTO tablename (col1, col2) VALUES (val1, val2)` + more info in hwdemo1
 // BROKEN!!! :*(
-async function addEmplolyee() {
+async function addEmployee() {
     await inquirer
         .prompt(addEmployeeQuestions)
         .then(function(data){
-            db.query(`INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (${data.employeeeFirstName}, ${data.employeeeLastName},  ${data.employeeeRole},  ${data.employeeeManager});`);
+
+            db.query(`INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [data.employeeeFirstName, data.employeeeLastName, data.employeeeRole, data.employeeeManager]);
         })
 }
 // UPDATE emp
@@ -150,6 +186,19 @@ async function viewAllRoles() {
     console.table(allRoles);
 }
 // ADD role CREATE - `INSERT INTO tablename (col1, col2) VALUES (val1, val2)` + more info in hwdemo1 @ 35'
+async function addRole() {
+    await inquirer
+        .prompt(addRoleQuestions)
+        .then(function(data){
+
+            const newRole = {};
+            newRole["name"] = data.roleTitle;
+            newRole["value"] = newRoleID;
+            rolesArray.push(newRole);
+            
+            db.query(`INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)`, [data.roleTitle, data.roleSalary, data.roleDepartment]);
+        })
+}
 
 // DEPTS DEPTS DEPTS
 // VIEW all depts READ - `SELECT * FROM tablename`
