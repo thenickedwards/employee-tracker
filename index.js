@@ -26,6 +26,7 @@ var rolesArray = [
 
 var newRoleID = rolesArray.length+1;
 
+// TODO:
 var employeesList = [];
 
 db.query('SELECT * FROM EMPLOYEES', (err, employeeData));
@@ -37,14 +38,7 @@ employeesList.push('None');
 console.log(employeesList);
 
 
-// db.query('SELECT * FROM employees', (err, employeeData) => {
-//     if (err) {
-//         console.log(err);
-//     }
-//     employeesList = employeeData.map(employeeData => `${employeeData.first_name} ${employeeData.last_name}`);
-//     employeesList.push('None');
-//     return employeesList
-// });
+
 
 
 // Question Arrays for Inquirer
