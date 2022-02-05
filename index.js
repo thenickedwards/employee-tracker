@@ -26,15 +26,26 @@ var rolesArray = [
 
 var newRoleID = rolesArray.length+1;
 
-// var managersArray = [
-//     {name: "Lead Engineer", value: 1},
-//     {name: "Software Engineer", value: 2},
-//     {name: "Lawyer", value: 3},
-//     {name: "Legal Team Lead", value: 4},
-//     {name: "Account Manager", value: 5},
-//     {name: "Salesperson", value: 6},
-//     {name: "Accountant", value: 7},
-// ]
+var employeesList = [];
+
+db.query('SELECT * FROM EMPLOYEES', (err, employeeData));
+
+employeesList = employeeData.map(employeeData => `${employeeData.first_name} ${employeeData.last_name}`);
+
+employeesList.push('None');
+
+console.log(employeesList);
+
+
+// db.query('SELECT * FROM employees', (err, employeeData) => {
+//     if (err) {
+//         console.log(err);
+//     }
+//     employeesList = employeeData.map(employeeData => `${employeeData.first_name} ${employeeData.last_name}`);
+//     employeesList.push('None');
+//     return employeesList
+// });
+
 
 // Question Arrays for Inquirer
 const mainMenu = [
@@ -74,8 +85,9 @@ const addEmployeeQuestions = [
     },
     {
         name: "employeeeManager",
-        type: "input",
-        message: "What is this id of this employee's manager?"
+        type: "list",
+        message: "What is this id of this employee's manager?",
+        choices: employeesList
     }
 ];
 
@@ -152,6 +164,7 @@ async function startMainMenu() {
     }
 }
 
+// EMPLOYEES FUNCTIONS
 // View all emps READ - `SELECT * FROM tablename`
 async function viewAllEmployees() {
     const allEmployees = await db.query('SELECT employees.id, CONCAT(employees.first_name, " ", employees.last_name) AS Name, employees.role_id AS Role, employees.manager_id AS Manager FROM employees');
@@ -173,13 +186,16 @@ async function addEmployee() {
     await inquirer
         .prompt(addEmployeeQuestions)
         .then(function(data){
+            console.log(employeesList);
 
-            db.query(`INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [data.employeeeFirstName, data.employeeeLastName, data.employeeeRole, data.employeeeManager]);
+
+            // PRETTY SURE THIS BELOW WORKS!!! DON'T DELETE
+            // db.query(`INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [data.employeeeFirstName, data.employeeeLastName, data.employeeeRole, data.employeeeManager]);
         })
 }
 // UPDATE emp
 
-// ROLES ROLES ROLES
+// ROLES FUNCTIONS
 // VIEW all roles READ - `SELECT * FROM tablename`
 async function viewAllRoles() {
     const allRoles = await db.query('SELECT * FROM roles');
@@ -200,7 +216,7 @@ async function addRole() {
         })
 }
 
-// DEPARMENTS FUNCTIONS
+// DEPARTMENTS FUNCTIONS
 // VIEW all depts READ - `SELECT * FROM tablename`
 async function viewAllDepartments() {
     const allDepartments = await db.query('SELECT * FROM departments');
