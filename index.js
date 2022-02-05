@@ -26,7 +26,6 @@ var rolesArray = [
 
 var newRoleID = rolesArray.length+1;
 
-// // TODO:
 var employeesArray = [
     {name: "Mike Chan", value: 1},
     {name: "Ashley Rodriguez", value: 2},
@@ -38,10 +37,6 @@ var employeesArray = [
 ]
 
 var newEmployeeID = employeesArray.length+1;
-
-
-
-
 
 // Question Arrays for Inquirer
 const mainMenu = [
@@ -161,23 +156,14 @@ async function startMainMenu() {
 }
 
 // EMPLOYEES FUNCTIONS
-// View all emps READ - `SELECT * FROM tablename`
+// View all employees
 async function viewAllEmployees() {
     const allEmployees = await db.query('SELECT employees.id, employees.first_name AS "first name", employees.last_name AS "last name", roles.title, departments.name AS department, roles.salary, CONCAT(manager.first_name, " ", manager.last_name) AS manager FROM employees LEFT JOIN employees manager ON manager.id = employees.manager_id INNER JOIN roles ON roles.id=employees.role_id INNER JOIN departments ON (departments.id = roles.department_id);');
     
     console.table(allEmployees);
 }
 
-// SELECT e.ID, e.name AS Employee, s.name AS Supervisor FROM employee e INNER JOIN employee s ON s.ID = e.supervisorID ORDER BY e.ID;
-
-// ALT?
-// db.query('SELECT * FROM employees')
-//     .then((results) => {
-//         console.table(results);
-//     });
-
-// ADD emp CREATE - `INSERT INTO tablename (col1, col2) VALUES (val1, val2)` + more info in hwdemo1
-// BROKEN!!! :*(
+// Add employee
 async function addEmployee() {
     await inquirer
         .prompt(addEmployeeQuestions)
@@ -185,7 +171,7 @@ async function addEmployee() {
 
             const newEmployee = {};
             newEmployee["name"] = `${data.employeeeFirstName} ${data.employeeeLastName}`;
-            newEmployee["value"] = newRoleID;
+            newEmployee["value"] = newEmployeeID;
             employeesArray.push(newEmployee);
 
             db.query(`INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [data.employeeeFirstName, data.employeeeLastName, data.employeeeRole, data.employeeeManager]);
@@ -194,12 +180,12 @@ async function addEmployee() {
 // UPDATE emp
 
 // ROLES FUNCTIONS
-// VIEW all roles READ - `SELECT * FROM tablename`
+// View all roles
 async function viewAllRoles() {
     const allRoles = await db.query('SELECT * FROM roles');
     console.table(allRoles);
 }
-// ADD role CREATE - `INSERT INTO tablename (col1, col2) VALUES (val1, val2)` + more info in hwdemo1 @ 35'
+// Add role
 async function addRole() {
     await inquirer
         .prompt(addRoleQuestions)
@@ -215,12 +201,12 @@ async function addRole() {
 }
 
 // DEPARTMENTS FUNCTIONS
-// VIEW all depts READ - `SELECT * FROM tablename`
+// View all departments
 async function viewAllDepartments() {
     const allDepartments = await db.query('SELECT * FROM departments');
     console.table(allDepartments);
 }
-// ADD dept CREATE - `INSERT INTO tablename (col1, col2) VALUES (val1, val2)`
+// Add department
 async function addDepartment() {
     await inquirer
         .prompt(addDepartmentQuestions)
