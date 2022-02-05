@@ -26,16 +26,16 @@ var rolesArray = [
 
 var newRoleID = rolesArray.length+1;
 
-// TODO:
-var employeesList = [];
+// // TODO:
+// var employeesList = [];
 
-db.query('SELECT * FROM EMPLOYEES', (err, employeeData));
+// db.query('SELECT * FROM EMPLOYEES', (err, employeeData));
 
-employeesList = employeeData.map(employeeData => `${employeeData.first_name} ${employeeData.last_name}`);
+// employeesList = employeeData.map(employeeData => `${employeeData.first_name} ${employeeData.last_name}`);
 
-employeesList.push('None');
+// employeesList.push('None');
 
-console.log(employeesList);
+// console.log(employeesList);
 
 
 
@@ -81,7 +81,7 @@ const addEmployeeQuestions = [
         name: "employeeeManager",
         type: "list",
         message: "What is this id of this employee's manager?",
-        choices: employeesList
+        choices: ["Kev Kev", "Sammie", "Judith"]
     }
 ];
 
@@ -161,7 +161,7 @@ async function startMainMenu() {
 // EMPLOYEES FUNCTIONS
 // View all emps READ - `SELECT * FROM tablename`
 async function viewAllEmployees() {
-    const allEmployees = await db.query('SELECT employees.id, CONCAT(employees.first_name, " ", employees.last_name) AS Name, employees.role_id AS Role, employees.manager_id AS Manager FROM employees');
+    const allEmployees = await db.query('SELECT employees.id, employees.first_name AS "first name", employees.last_name AS "last name", roles.title, departments.name AS department, roles.salary, CONCAT(manager.first_name, " ", manager.last_name) AS manager FROM employees LEFT JOIN employees manager ON manager.id = employees.manager_id INNER JOIN roles ON roles.id=employees.role_id INNER JOIN departments ON (departments.id = roles.department_id);');
     
     console.table(allEmployees);
 }
