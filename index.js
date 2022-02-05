@@ -48,6 +48,25 @@ const addEmployeeQuestions = [
     }
 ];
 
+const addRoleQuestions = [
+    {
+        name: "roleTitle",
+        type: "input",
+        message: "What is the title of this role?"
+    },
+    {
+        name: "roleSalary",
+        type: "input",
+        message: "What is the salary of this role?"
+    },
+    {
+        name: "roleDepartment",
+        type: "input",
+        message: "Which department is appropriate this role?",
+        choices: departmentArray
+    }
+]
+
 const addDepartmentQuestions = [
     {
         name: "departmentName",
@@ -143,7 +162,7 @@ async function addDepartment() {
     await inquirer
         .prompt(addDepartmentQuestions)
         .then(function(data){
-            db.query(`INSERT INTO departments WHERE name = ?`, data.departmentName);
+            db.query(`INSERT INTO departments (name) VALUES (?)`, data.departmentName);
         })
 }
 
