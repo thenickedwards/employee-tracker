@@ -27,15 +27,17 @@ var rolesArray = [
 var newRoleID = rolesArray.length+1;
 
 // // TODO:
-// var employeesList = [];
+var employeesArray = [
+    {name: "Mike Chan", value: 1},
+    {name: "Ashley Rodriguez", value: 2},
+    {name: "Kevin Tupik", value: 3},
+    {name: "Kunal Singh", value: 4},
+    {name: "Malia Brown", value: 5},
+    {name: "Sarah Lourd", value: 6},
+    {name: "Tom Allen", value: 7},
+]
 
-// db.query('SELECT * FROM EMPLOYEES', (err, employeeData));
-
-// employeesList = employeeData.map(employeeData => `${employeeData.first_name} ${employeeData.last_name}`);
-
-// employeesList.push('None');
-
-// console.log(employeesList);
+var newEmployeeID = employeesArray.length+1;
 
 
 
@@ -81,7 +83,7 @@ const addEmployeeQuestions = [
         name: "employeeeManager",
         type: "list",
         message: "What is this id of this employee's manager?",
-        choices: ["Kev Kev", "Sammie", "Judith"]
+        choices: employeesArray
     }
 ];
 
@@ -94,7 +96,7 @@ const addRoleQuestions = [
     {
         name: "roleSalary",
         type: "input",
-        message: "What is the salary of this role? (Enter as whole number with no special characters, e.g. $50,000 = 50000)"
+        message: "What is the salary of this role? (Enter as whole number with no special characters, e.g. $50,000 = 50000.)"
     },
     {
         name: "roleDepartment",
@@ -180,11 +182,13 @@ async function addEmployee() {
     await inquirer
         .prompt(addEmployeeQuestions)
         .then(function(data){
-            console.log(employeesList);
 
+            const newEmployee = {};
+            newEmployee["name"] = `${data.employeeeFirstName} ${data.employeeeLastName}`;
+            newEmployee["value"] = newRoleID;
+            employeesArray.push(newEmployee);
 
-            // PRETTY SURE THIS BELOW WORKS!!! DON'T DELETE
-            // db.query(`INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [data.employeeeFirstName, data.employeeeLastName, data.employeeeRole, data.employeeeManager]);
+            db.query(`INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [data.employeeeFirstName, data.employeeeLastName, data.employeeeRole, data.employeeeManager]);
         })
 }
 // UPDATE emp
