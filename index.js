@@ -200,7 +200,7 @@ async function addRole() {
         })
 }
 
-// DEPTS DEPTS DEPTS
+// DEPARMENTS FUNCTIONS
 // VIEW all depts READ - `SELECT * FROM tablename`
 async function viewAllDepartments() {
     const allDepartments = await db.query('SELECT * FROM departments');
