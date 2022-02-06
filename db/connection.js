@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 const connection = mysql.createConnection(
     {
       host: '127.0.0.1',
-      // Your MySQL username below
+      // Your MySQL username below if different
       user: 'root',
       // Your MySQL password below if used, if not leave as is
       password: '',
@@ -16,7 +16,7 @@ const connection = mysql.createConnection(
       if (err) {
         throw err;
       } else {
-          console.log('Sucessfully connected to mysql!')
+          // console.log('Sucessfully connected to mysql!')
       }
   });
 

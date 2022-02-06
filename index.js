@@ -139,7 +139,7 @@ async function startMainMenu() {
         await addEmployee();
         startMainMenu();
     }
-    // TODO: IF UPDATE EMP
+
     if (response.mainMenuSelection == 'UPDATE_EMPLOYEE_ROLE') {
         await updateEmployeeRole();
         startMainMenu();
@@ -194,7 +194,8 @@ async function addEmployee() {
             db.query(`INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [data.employeeeFirstName, data.employeeeLastName, data.employeeeRole, data.employeeeManager]);
         })
 }
-// UPDATE emp
+
+// Update employee role
 async function updateEmployeeRole() {
     await inquirer
         .prompt(updateEmployeeRoleQuestions)
@@ -212,6 +213,7 @@ async function viewAllRoles() {
     const allRoles = await db.query('SELECT roles.id, roles.title AS Role, roles.salary AS Salary, departments.name AS Department FROM roles INNER JOIN departments ON (departments.id = roles.department_id)');
     console.table(allRoles);
 }
+
 // Add role
 async function addRole() {
     await inquirer
@@ -233,6 +235,7 @@ async function viewAllDepartments() {
     const allDepartments = await db.query('SELECT departments.id, departments.name AS Department FROM departments');
     console.table(allDepartments);
 }
+
 // Add department
 async function addDepartment() {
     await inquirer
