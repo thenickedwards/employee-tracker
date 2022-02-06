@@ -82,6 +82,21 @@ const addEmployeeQuestions = [
     }
 ];
 
+const updateEmployeeRoleQuestions = [
+    {
+        name: "updateEmployee",
+        type: "list",
+        message: "Which employee's role would you like to update?",
+        choices: employeesArray
+    },
+    {
+        name: "updateRole",
+        type: "list",
+        message: "Which role do you want to assign to this employee??",
+        choices: rolesArray
+    }
+]
+
 const addRoleQuestions = [
     {
         name: "roleTitle",
@@ -115,35 +130,37 @@ async function startMainMenu() {
     .prompt(mainMenu)
     // console.log(response);
 
-    // IF VIEW ALL EMPS
     if (response.mainMenuSelection == 'VIEW_EMPLOYEES') {
         await viewAllEmployees();
         startMainMenu();
     }
-    // IF ADD EMP
+
     if (response.mainMenuSelection == 'ADD_EMPLOYEE') {
         await addEmployee();
         startMainMenu();
     }
-    // IF UPDATE EMP
-    
-    // IF VIEW ALL ROLES
+    // TODO: IF UPDATE EMP
+    if (response.mainMenuSelection == 'UPDATE_EMPLOYEE_ROLE') {
+        await updateEmployeeRole();
+        startMainMenu();
+    }
+
+
     if (response.mainMenuSelection == 'VIEW_ROLES') {
         await viewAllRoles();
         startMainMenu();
     }
-    // IF ADD ROLE
+
     if (response.mainMenuSelection == 'ADD_ROLE') {
         await addRole();
         startMainMenu();
     }
 
-    // IF VIEW ALL DEPTS
     if (response.mainMenuSelection == 'VIEW_DEPARTMENTS') {
         await viewAllDepartments();
         startMainMenu();
     }
-    // IF ADD DEPTS
+
     if (response.mainMenuSelection == 'ADD_DEPARTMENT') {
         await addDepartment();
         startMainMenu();
@@ -158,7 +175,7 @@ async function startMainMenu() {
 // EMPLOYEES FUNCTIONS
 // View all employees
 async function viewAllEmployees() {
-    const allEmployees = await db.query('SELECT employees.id, employees.first_name AS "first name", employees.last_name AS "last name", roles.title, departments.name AS department, roles.salary, CONCAT(manager.first_name, " ", manager.last_name) AS manager FROM employees LEFT JOIN employees manager ON manager.id = employees.manager_id INNER JOIN roles ON roles.id=employees.role_id INNER JOIN departments ON (departments.id = roles.department_id);');
+    const allEmployees = await db.query('SELECT employees.id, employees.first_name AS "First Name", employees.last_name AS "Last Name", roles.title AS Role, departments.name AS Department, roles.salary AS Salary, CONCAT(manager.first_name, " ", manager.last_name) AS Manager FROM employees LEFT JOIN employees manager ON manager.id = employees.manager_id INNER JOIN roles ON roles.id=employees.role_id INNER JOIN departments ON (departments.id = roles.department_id)');
     
     console.table(allEmployees);
 }
@@ -178,11 +195,21 @@ async function addEmployee() {
         })
 }
 // UPDATE emp
+async function updateEmployeeRole() {
+    await inquirer
+        .prompt(updateEmployeeRoleQuestions)
+        .then(function(data){
+            console.log('updateEmployeeRole is running!')
+            console.log(data)
+
+            db.query(`UPDATE employees SET role_id = ? WHERE id = ?`, [data.updateRole, data.updateEmployee]);
+    })
+}
 
 // ROLES FUNCTIONS
 // View all roles
 async function viewAllRoles() {
-    const allRoles = await db.query('SELECT * FROM roles');
+    const allRoles = await db.query('SELECT roles.id, roles.title AS Role, roles.salary AS Salary, departments.name AS Department FROM roles INNER JOIN departments ON (departments.id = roles.department_id)');
     console.table(allRoles);
 }
 // Add role
@@ -203,7 +230,7 @@ async function addRole() {
 // DEPARTMENTS FUNCTIONS
 // View all departments
 async function viewAllDepartments() {
-    const allDepartments = await db.query('SELECT * FROM departments');
+    const allDepartments = await db.query('SELECT departments.id, departments.name AS Department FROM departments');
     console.table(allDepartments);
 }
 // Add department
