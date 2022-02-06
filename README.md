@@ -20,7 +20,7 @@ URL for GitHub repo: https://github.com/thenickedwards/employee-tracker
 ## Demo Video
 This video demonstrates how to use the Employee Tracker application (also found at https://watch.screencastify.com/v/yzHIe9XVOIa6nKIt5Eyx).
 
-https://user-images.githubusercontent.com/92474821/150442295-1fc37ea2-baeb-46f0-9489-67392337ebce.mp4
+https://user-images.githubusercontent.com/92474821/152664910-50a6f220-448a-442e-8823-700de9fdfc74.mp4
 
 
 
